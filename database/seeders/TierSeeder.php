@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Tier;
 use Illuminate\Database\Seeder;
 
 class TierSeeder extends Seeder
@@ -12,6 +12,12 @@ class TierSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        $prices = [5, 10, 15];
+        for($i = 1; $i<=count($prices); $i++){
+            Tier::create([
+                'name' => "Tier$i",
+                'price' => $prices[$i-1],
+            ]);
+        }
     }
 }

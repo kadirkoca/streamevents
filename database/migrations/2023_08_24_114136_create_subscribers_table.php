@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('subscribers', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->boolean('status_read')->default(false);
+            $table->unsignedBigInteger('user_id')->unsigned();
+            $table->unsignedBigInteger('tier_id')->unsigned();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('tier_id')->references('id')->on('tiers')->onDelete('cascade');
         });
     }
 
