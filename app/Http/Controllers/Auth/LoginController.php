@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
@@ -20,7 +21,7 @@ class LoginController extends Controller
         $user = Socialite::driver('google')->stateless()->user();
 
         $this->CreateOrAuthenticate($user);
-        return redirect()->route('home');
+        return redirect()->route('dashboard');
     }
 
     public function redirectToFacebook(): RedirectResponse
@@ -34,7 +35,7 @@ class LoginController extends Controller
         $user = Socialite::driver('facebook')->stateless()->user();
 
         $this->CreateOrAuthenticate($user);
-        return redirect()->route('home');
+        return redirect()->route('dashboard');
     }
 
     protected function CreateOrAuthenticate($data): void
@@ -49,6 +50,7 @@ class LoginController extends Controller
             $user->avatar = $data->avatar;
             $user->save();
         }
+        event(new Registered($user));
         Auth::login($user);
     }
 }
